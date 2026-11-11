@@ -1,6 +1,6 @@
 # Compte rendu : TP API LogiAI
 
-**Noms :** TODO  **Groupe :** TODO
+**Noms :** Aymen Ichqarrane, Ihssane Moutchou  **Groupe :** G3
 
 ## 1. Environnement et premiers tests
 
