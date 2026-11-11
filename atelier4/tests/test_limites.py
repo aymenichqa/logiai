@@ -8,8 +8,19 @@ import pytest
 CAS_LIMITES = [
     ("distance_km", 1, 200), ("distance_km", 0.9, 422),
     ("distance_km", 1000, 200), ("distance_km", 1001, 422),
-    # À VOUS : ajoutez les deux côtés de chaque borne pour les 6 autres champs.
-    # Pensez aussi aux entiers : 11.5 est-il une heure valide ?
+    ("poids_kg", 0.1, 200), ("poids_kg", 0.09, 422),
+    ("poids_kg", 3500, 200), ("poids_kg", 3500.1, 422),
+    ("heure_depart", 0, 200), ("heure_depart", -1, 422),
+    ("heure_depart", 23, 200), ("heure_depart", 24, 422),
+    # un entier décimal n'est pas une heure valide (le champ est déclaré int)
+    ("heure_depart", 11.5, 422),
+    ("pluie_mm", 0, 200), ("pluie_mm", -0.1, 422),
+    ("pluie_mm", 100, 200), ("pluie_mm", 100.1, 422),
+    ("trafic_index", 0, 200), ("trafic_index", -0.1, 422),
+    ("trafic_index", 10, 200), ("trafic_index", 10.1, 422),
+    ("nb_arrets", 0, 200), ("nb_arrets", -1, 422),
+    ("nb_arrets", 15, 200), ("nb_arrets", 16, 422),
+    ("type_vehicule", "moto", 200), ("type_vehicule", "avion", 422),
 ]
 
 

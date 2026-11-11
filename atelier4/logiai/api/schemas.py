@@ -17,10 +17,10 @@ class Livraison(BaseModel):
 
     distance_km: float = Field(ge=1, le=1000, description="Distance du trajet (km)")
     poids_kg: float = Field(ge=0.1, le=3500, description="Poids total transporté (kg)")
-    heure_depart: int = Field(ge=0, le=24, description="Heure de départ (0 à 23)")
+    heure_depart: int = Field(ge=0, le=23, description="Heure de départ (0 à 23)")
     pluie_mm: float = Field(ge=0, le=100, description="Pluie prévue sur le trajet (mm)")
     trafic_index: float = Field(ge=0, le=10, description="Indice de trafic (0 = fluide, 10 = saturé)")
-    nb_arrets: int = Field(le=15, description="Nombre d'arrêts de livraison")
+    nb_arrets: int = Field(ge=0, le=15, description="Nombre d'arrêts de livraison")
     type_vehicule: Literal["moto", "fourgon", "camion"] = Field(description="Type de véhicule")
 
 
