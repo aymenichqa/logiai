@@ -27,7 +27,7 @@ Pourquoi certains tests qui attendent un 422 passent-ils déjà ? Le schéma de 
 
 À quoi sert l'API si le rappel est faible ? Qu'est-ce qu'un dispatcher y gagne quand même ?
 
-TODO (réponse personnelle)
+Le modèle ne remplace pas le dispatcher, il lui donne un ordre de priorité. Avec un rappel de 46 %, on rate encore plus de la moitié des retards, donc l'API ne sert pas à annoncer un retard avec certitude : elle sort du lot les livraisons les plus suspectes pour que le dispatcher s'en occupe en premier. Il en surveille une poignée au lieu de les regarder toutes. Et quand elle alerte, elle a raison environ 6 fois sur 10 (précision 0,617), ce qui reste rentable : un appel au chauffeur ou un message au client coûte peu, alors qu'un retard non annoncé coûte cher en réclamation. Le seuil de 0,4 va dans ce sens : on accepte quelques fausses alertes en plus plutôt que de laisser passer un vrai retard, parce que les deux erreurs n'ont pas le même prix. Enfin, le modèle reste simple (régression logistique) et les variables sont parlantes (trafic, pluie, arrêts), donc le dispatcher peut comprendre pourquoi une livraison ressort. Avec 0,774 d'accuracy contre 0,726 pour la baseline, le gain est modeste mais réel : c'est une aide à la décision, pas un oracle.
 
 ## 2. Mon schéma
 
@@ -92,8 +92,8 @@ Ce qu'on gagne : le problème est visible immédiatement au déploiement (échec
 
 Recommandation : **option A** pour ce TP, car elle garde `/health` utile et permet de constater puis corriger le problème sans arrêter le service. En production, on peut combiner les deux : refuser de démarrer si le modèle est absent, tout en gardant une sonde de santé distincte.
 
-Décision finale : TODO (à trancher par toi)
+Décision finale : on garde l'option A. Le serveur démarre même sans modèle, `/health` répond toujours (avec `model_loaded: false`) et `/v1/predict` renvoie un 503 qui explique quoi faire. C'est ce qu'on préfère ici : l'API reste consultable (`/docs`, `/health`), on peut réentraîner le modèle et redémarrer sans que tout le service ait l'air cassé, et le diagnostic est plus simple. Le risque, c'est qu'un service « vivant » mais incapable de prédire passe inaperçu ; en production, on ajouterait une surveillance de `/health` pour être prévenu tout de suite, et on pourrait refuser le démarrage une fois le déploiement stabilisé.
 
 ## 7. Lien de la pull request
 
-https://github.com/aymenichqa/logiai/pull/1#issue-6332341938
+https://github.com/aymenichqa/logiai/pull/1
