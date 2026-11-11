@@ -96,4 +96,4 @@ Décision finale : TODO (à trancher par toi)
 
 ## 7. Lien de la pull request
 
-TODO (lien de la PR à ouvrir par toi, après relecture par ton binôme)
+https://github.com/aymenichqa/logiai/pull/1#issue-6332341938
