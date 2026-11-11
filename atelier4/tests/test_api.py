@@ -1,8 +1,8 @@
 """Tests de base (fournis) : le filet de sécurité hérité du TP précédent."""
 from logiai.api.main import state
 
-FACILE = dict(distance_km=5, poids_kg=3, heure_depart=11, pluie_mm=0,
-              trafic_index=1, nb_arrets=0, type_vehicule="moto")
+FACILE = {"distance_km": 5, "poids_kg": 3, "heure_depart": 11, "pluie_mm": 0,
+          "trafic_index": 1, "nb_arrets": 0, "type_vehicule": "moto"}
 
 
 def test_health_repond_ok(client):
