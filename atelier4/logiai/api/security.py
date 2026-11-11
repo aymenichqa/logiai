@@ -24,7 +24,22 @@ def verify_api_key(x_api_key: str | None = Header(default=None)) -> str:
     Utilisez _egal(...) pour comparer, jamais ==.
     Ajoutez headers={"WWW-Authenticate": "ApiKey"} aux 401.
     """
-    raise NotImplementedError("verify_api_key() n'est pas encore écrite")
+    if not x_api_key:
+        raise HTTPException(
+            status_code=401,
+            detail="Clé API absente : en-tête X-API-Key requis.",
+            headers={"WWW-Authenticate": "ApiKey"},
+        )
+    # l'admin d'abord : les deux clés sont distinctes, mais l'ordre rend le rôle explicite
+    if _egal(x_api_key, config.ADMIN_KEY):
+        return "admin"
+    if _egal(x_api_key, config.API_KEY):
+        return "user"
+    raise HTTPException(
+        status_code=401,
+        detail="Clé API invalide.",
+        headers={"WWW-Authenticate": "ApiKey"},
+    )
 
 
 def require_admin(role: str = Depends(verify_api_key)) -> str:
@@ -32,4 +47,9 @@ def require_admin(role: str = Depends(verify_api_key)) -> str:
 
     À VOUS : si role n'est pas "admin", lever HTTPException 403 ; sinon renvoyer role.
     """
-    raise NotImplementedError("require_admin() n'est pas encore écrite")
+    if role != "admin":
+        raise HTTPException(
+            status_code=403,
+            detail="Accès réservé à l'administrateur.",
+        )
+    return role
