@@ -26,6 +26,18 @@ Suite du TP précédent : l'API LogiAI existe. Aujourd'hui vous la testez pour l
 
     python -m pytest
 
+## Structure
+
+    atelier4/
+    ├── logiai/                 # le paquet Python : config, dataset, train, predict
+    │   └── api/                # main.py (routes, CORS), schemas.py (bornes), security.py (clés)
+    ├── tests/                  # conftest.py (fixtures) + test_api, test_casser, test_limites, test_securite
+    ├── web/index.html          # la page qui appelle l'API
+    ├── docs/adr/003-securite.md
+    ├── data/ et models/        # générés par dataset.py et train.py, non versionnés
+    ├── .env                    # local, jamais versionné
+    └── COMPTE_RENDU.md
+
 ## Où sont les trous (cherchez les TODO)
 
 - `logiai/api/security.py` : deux fonctions à écrire
