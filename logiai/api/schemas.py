@@ -10,7 +10,12 @@ class Livraison(BaseModel):
     model_config = ConfigDict(extra="forbid")  # un champ inconnu est refusé (422)
 
     distance_km: float = Field(ge=1, le=1000, description="Distance du trajet (km)")
-    # TODO : poids_kg, heure_depart, pluie_mm, trafic_index, nb_arrets, type_vehicule
+    poids_kg: float = Field(ge=0.1, le=5000, description="Poids transporté (kg)")
+    heure_depart: int = Field(ge=0, le=23, description="Heure de départ, de 0 à 23")
+    pluie_mm: float = Field(ge=0, le=100, description="Pluie prévue sur le trajet (mm)")
+    trafic_index: float = Field(ge=0, le=10, description="Trafic : 0 = fluide, 10 = saturé")
+    nb_arrets: int = Field(ge=0, le=30, description="Nombre d'arrêts de livraison")
+    type_vehicule: Literal["moto", "fourgon", "camion"] = Field(description="Type de véhicule")
 
 
 class PredictionOut(BaseModel):

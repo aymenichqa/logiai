@@ -8,6 +8,9 @@ VALIDE = {
     "pluie_mm": 8.0, "trafic_index": 7.5, "nb_arrets": 4, "type_vehicule": "camion",
 }
 
+FACILE = dict(distance_km=5, poids_kg=3, heure_depart=11, pluie_mm=0,
+              trafic_index=1, nb_arrets=0, type_vehicule="moto")
+
 
 def post(client, **changements):
     return client.post("/v1/predict", json={**VALIDE, **changements})
@@ -42,11 +45,9 @@ def test_predict_probabilite_entre_0_et_1():
 
 
 def test_predict_trajet_risque_plus_eleve_que_trajet_facile():
-    facile = dict(distance_km=5, poids_kg=3, heure_depart=11, pluie_mm=0,
-                  trafic_index=1, nb_arrets=0, type_vehicule="moto")
     with TestClient(app) as client:
         p_difficile = post(client).json()["probabilite_retard"]
-        p_facile = post(client, **facile).json()["probabilite_retard"]
+        p_facile = post(client, **FACILE).json()["probabilite_retard"]
         assert p_difficile > p_facile
 
 
@@ -85,3 +86,14 @@ def test_modele_absent_renvoie_503():
     with TestClient(app) as client:
         state.pop("predictor", None)  # on simule un modèle non chargé
         assert post(client).status_code == 503
+
+
+def test_heure_24_refusee():
+    with TestClient(app) as client:
+        assert post(client, heure_depart=24).status_code == 422
+
+
+def test_alerte_coherente_avec_le_seuil():
+    with TestClient(app) as client:
+        assert post(client).json()["alerte"] is True
+        assert post(client, **FACILE).json()["alerte"] is False
